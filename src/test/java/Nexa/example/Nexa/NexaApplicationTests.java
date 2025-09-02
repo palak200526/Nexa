@@ -1,0 +1,13 @@
+package Nexa.example.Nexa;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class NexaApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
