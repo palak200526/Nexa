@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Mentors</title></head>
+<body>
+<h1>Mentors</h1>
+
+<form th:action="@{/mentors/add}" method="post">
+    <input type="text" name="name" placeholder="Name" required/>
+    <input type="email" name="email" placeholder="Email" required/>
+    <button type="submit">Add Mentor</button>
+</form>
+
+<ul>
+    <li th:each="m : ${mentors}" th:text="${m.name + ' - ' + m.email}"></li>
+</ul>
+</body>
+</html>
