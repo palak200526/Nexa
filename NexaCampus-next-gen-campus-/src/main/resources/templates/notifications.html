@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notifications</title>
+</head>
+<body>
+<h1>Notifications</h1>
+
+<!-- Add new notification -->
+<a href="/notifications/new">Add Notification</a>
+
+<!-- Notification List -->
+<ul>
+    <li th:each="n : ${notifications}">
+        <span th:text="${n.title}"></span> -
+        <span th:text="${n.message}"></span>
+
+        <!-- Edit button -->
+        <a th:href="@{'/notifications/edit/' + ${n.id}}">Edit</a>
+
+        <!-- Delete form -->
+        <form th:action="@{'/notifications/delete/' + ${n.id}}" method="post" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+</body>
+</html>
