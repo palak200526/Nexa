@@ -3,7 +3,7 @@ package Nexa.example.Nexa.model;
 import jakarta.persistence.*;
 
 @Entity
-public class Teacher {
+public class Mentor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,9 +11,9 @@ public class Teacher {
 
     private String name;
     private String email;
-    private String subject;
+    private String department;
 
-    // Getters & Setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -35,10 +35,10 @@ public class Teacher {
         this.email = email;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getDepartment() {
+        return department;
     }
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }
