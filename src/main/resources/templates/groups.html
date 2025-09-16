@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Groups</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Groups List</h1>
+
+<a th:href="@{/groups/new}">Add New Group</a>
+
+<table border="1" cellpadding="10">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Group Name</th>
+        <th>Teacher</th>
+        <th>Students</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="group : ${groups}">
+        <td th:text="${group.id}">1</td>
+        <td th:text="${group.name}">Group Name</td>
+        <td th:text="${group.teacher != null ? group.teacher.name : 'No Teacher'}">Teacher Name</td>
+        <td>
+            <ul>
+                <li th:each="student : ${group.students}" th:text="${student.name}">Student Name</li>
+            </ul>
+        </td>
+        <td>
+            <a th:href="@{'/groups/edit/' + ${group.id}}">Edit</a>
+            <form th:action="@{'/groups/delete/' + ${group.id}}" method="post" style="display:inline">
+                <button type="submit">Delete</button>
+            </form>
+            <a th:href="@{'/groups/' + ${group.id} + '/subjects'}">Subjects</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

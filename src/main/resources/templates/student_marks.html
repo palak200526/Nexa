@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Marks</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>My Marks</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Subject</th>
+        <th>Exam</th>
+        <th>Marks</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="m : ${marks}">
+        <td th:text="${m.subject != null ? m.subject.name : 'N/A'}">Subject</td>
+        <td th:text="${m.examName}">Exam</td>
+        <td th:text="${m.marksObtained}">0</td>
+    </tr>
+    </tbody>
+ </table>
+
+ <p><a href="/students">⬅ Back to Students</a></p>
+</body>
+</html>
+
+

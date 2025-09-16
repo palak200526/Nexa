@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Teacher Added</title>
+</head>
+<body>
+<h2>✅ Teacher Added Successfully!</h2>
+<p th:if="${message}" th:text="${message}"></p>
+<p th:if="${teacher}"><strong>Name:</strong> <span th:text="${teacher.name}"></span></p>
+<p th:if="${teacher}"><strong>Email:</strong> <span th:text="${teacher.email}"></span></p>
+<p th:if="${teacher}"><strong>Generated Password:</strong> <b th:text="${teacher.password}"></b></p>
+
+<div style="margin-top: 12px;">
+    <a href="/login" style="margin-right: 12px;">Login</a>
+    <a href="/teachers">Back to Teachers List</a>
+ </div>
+</body>
+</html>

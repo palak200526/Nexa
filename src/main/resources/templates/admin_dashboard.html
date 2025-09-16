@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .nav { margin-top: 20px; }
+        .nav a {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .nav a:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+<h1>📊 Admin Dashboard</h1>
+<p>Welcome, Admin! Manage everything from here:</p>
+
+<div class="nav">
+    <a href="/students">👨‍🎓 Manage Students</a>
+    <a href="/subjects">📖 Manage Subjects</a>
+    <a href="/groups">👥 Manage Groups</a>
+    <a href="/mentors">👨‍🏫 Manage Mentors</a>
+    <a href="/teachers">👩‍🏫 Manage Teachers</a>
+    <a href="/notifications">🔔 Manage Notifications</a>
+    <a href="/teacher-subject-groups">📚 Manage Teacher-Subject Assignments</a>
+</div>
+</body>
+</html>

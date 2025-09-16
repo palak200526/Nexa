@@ -1,6 +1,13 @@
 package Nexa.example.Nexa.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Student {
@@ -10,14 +17,33 @@ public class Student {
     private Long id;
 
     private String name;
+    @Column(unique = true, nullable = false)
     private String email;
     private String department;
+    @Column(name = "academic_year")
     private Integer year;
+    private String password;
 
-    // Many students → One mentor
-    @ManyToOne
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // Many students → One mentor (eager to avoid LazyInitializationException in views)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
+
+    @ManyToOne
+    private Group group;
+
+    // Add getters/setters
+    public Group getGroup() { return group; }
+    public void setGroup(Group group) { this.group = group; }
+
 
     // Getters & setters
     public Long getId() {

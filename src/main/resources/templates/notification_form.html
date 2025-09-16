@@ -15,6 +15,9 @@
     <label>Message:</label>
     <textarea th:field="*{message}" required></textarea><br/>
 
+    <label>Target Audience:</label>
+    <input type="text" th:field="*{targetAudience}" placeholder="e.g., All Students, CS Department" required/><br/>
+
     <button type="submit">Save</button>
 </form>
 

@@ -48,7 +48,7 @@ public class NotificationController {
     }
 
     // ✅ Delete notification
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteNotification(@PathVariable Long id) {
         repo.deleteById(id);
         return "redirect:/notifications";

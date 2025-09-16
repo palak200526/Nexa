@@ -12,15 +12,17 @@
 <!-- Notification List -->
 <ul>
     <li th:each="n : ${notifications}">
-        <span th:text="${n.title}"></span> -
-        <span th:text="${n.message}"></span>
+        <strong th:text="${n.title}"></strong> -
+        <span th:text="${n.message}"></span> -
+        <em th:text="'Target: ' + ${n.targetAudience}"></em> -
+        <small th:text="${n.createdAt}"></small>
 
         <!-- Edit button -->
         <a th:href="@{'/notifications/edit/' + ${n.id}}">Edit</a>
 
         <!-- Delete form -->
         <form th:action="@{'/notifications/delete/' + ${n.id}}" method="post" style="display:inline;">
-            <button type="submit">Delete</button>
+            <button type="submit" onclick="return confirm('Delete this notification?');">Delete</button>
         </form>
     </li>
 </ul>

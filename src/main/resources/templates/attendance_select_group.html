@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Select Group to Mark Attendance</title>
+</head>
+<body>
+<h2>Select Group to Mark Attendance</h2>
+
+<form id="selectForm">
+    <label>Group:</label>
+    <select id="groupSelect" name="groupId">
+        <option th:each="g : ${groups}" th:value="${g.id}" th:text="${g.name}"></option>
+    </select>
+
+    <label>Teacher:</label>
+    <select id="teacherSelect" name="teacherId">
+        <option th:each="t : ${teachers}" th:value="${t.id}" th:text="${t.name}"></option>
+    </select>
+
+    <button type="button" onclick="redirectToMark()">Go</button>
+</form>
+
+<script>
+    function redirectToMark() {
+        var groupId = document.getElementById('groupSelect').value;
+        var teacherId = document.getElementById('teacherSelect').value;
+
+        if(groupId && teacherId) {
+            window.location.href = '/attendance/group/' + groupId + '/mark?teacherId=' + teacherId;
+        } else {
+            alert('Please select both a group and a teacher!');
+        }
+    }
+</script>
+</body>
+</html>

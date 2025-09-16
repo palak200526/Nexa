@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add/Edit Group</title>
+</head>
+<body>
+<h2 th:text="${group.id == null} ? 'Add New Group' : 'Edit Group'"></h2>
+
+<form th:action="@{/groups/save}" method="post">
+    <label>Group Name:</label>
+    <input type="text" name="name" th:value="${group.name}" required />
+    <br><br>
+
+    <label>Teacher:</label>
+    <select name="teacherId" required>
+        <option th:each="teacher : ${teachers}"
+                th:value="${teacher.id}"
+                th:text="${teacher.name}">
+        </option>
+    </select>
+    <br><br>
+
+    <button type="submit">Save Group</button>
+</form>
+
+<a th:href="@{/groups}">Back to Groups List</a>
+</body>
+</html>

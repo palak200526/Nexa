@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Attendance</title>
+</head>
+<body>
+<h1>My Attendance</h1>
+
+<table border="1">
+    <tr>
+        <th>Date</th>
+        <th>Subject</th>
+        <th>Status</th>
+    </tr>
+    <tr th:each="a : ${attendanceList}">
+        <td th:text="${a.date}"></td>
+        <td th:text="${a.subject.name}"></td>
+        <td th:text="${a.present ? 'Present' : 'Absent'}"></td>
+    </tr>
+</table>
+
+<p><a href="/students">⬅ Back to Students</a></p>
+</body>
+</html>

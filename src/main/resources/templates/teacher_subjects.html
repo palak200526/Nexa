@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Teacher Subjects</title>
+</head>
+<body>
+<h1>My Subjects</h1>
+
+<ul>
+    <li th:each="sub : ${subjects}">
+        <span th:text="${sub.name}">Subject</span>
+        <a th:href="@{'/attendance/mark/' + ${sub.id}}">Mark Attendance</a>
+    </li>
+</ul>
+
+<p><a href="/teachers">⬅ Back to Teachers</a></p>
+</body>
+</html>

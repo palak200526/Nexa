@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Group Students</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<h1 th:text="'Students in ' + ${group.name}">Group Name</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Year</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.name}">Name</td>
+        <td th:text="${student.email}">Email</td>
+        <td th:text="${student.department}">Department</td>
+        <td th:text="${student.year}">Year</td>
+        <td>
+            <form th:action="@{|/teacher/groups/${group.id}/students/${student.id}/attendance|}" method="post" style="display:inline">
+                <input type="hidden" name="teacherId" th:value="${group.teacher.id}" />
+                <label>Subject ID:</label>
+                <input type="number" name="subjectId" required style="width:80px"/>
+                <label>Present:</label>
+                <select name="present">
+                    <option value="true">Present</option>
+                    <option value="false">Absent</option>
+                </select>
+                <button type="submit">Save</button>
+            </form>
+            <a th:href="@{/attendance}">View Attendance Records</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/teacher/groups}">Back to Groups</a>
+</body>
+</html>

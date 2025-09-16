@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mark Attendance</title>
+</head>
+<body>
+<h2 th:text="'Mark Attendance for ' + ${group.name}"></h2>
+
+<form th:action="@{'/attendance/group/' + ${group.id} + '/save'}" method="post">
+    <input type="hidden" name="teacherId" th:value="${teacherId}" />
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Present Today?</th>
+            <th>Previous Attendance</th>
+        </tr>
+        <tr th:each="s : ${students}">
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.email}"></td>
+            <td th:text="${s.department}"></td>
+            <td th:text="${s.year}"></td>
+            <td>
+                <input type="checkbox" name="presentStudents" th:value="${s.id}" />
+            </td>
+            <td>
+                <span th:each="a : ${attendanceList}"
+                      th:if="${a.student.id == s.id}"
+                      th:text="${a.date + ' - ' + (a.present ? 'Present' : 'Absent')}"></span>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+    <button type="submit">Save Attendance</button>
+</form>
+
+<br/>
+<a href="/attendance/groups">Back to Groups</a>
+</body>
+</html>

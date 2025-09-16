@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Teacher Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .nav { margin-top: 20px; }
+        .nav a {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .nav a:hover { background: #1976D2; }
+    </style>
+</head>
+<body>
+<h1>👩‍🏫 Teacher Dashboard</h1>
+<p>Welcome, Teacher! Manage your classes here:</p>
+
+<div class="nav">
+    <a href="/login">🔐 Login</a>
+ </div>
+
+<h2>Your Groups</h2>
+<ul>
+    <li th:each="g : ${groups}">
+        <a th:href="@{|/attendance/group/${g.id}/mark?teacherId=${teacher.id}|}" th:text="${g.name}"></a>
+    </li>
+
+    <li th:if="${#lists.isEmpty(groups)}">No groups assigned yet.</li>
+ </ul>
+
+<!-- Attendance actions moved to group students page -->
+</body>
+</html>
