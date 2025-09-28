@@ -1,3 +1,5 @@
+package Nexa.example.Nexa.controller;
+
 import Nexa.example.Nexa.model.Attendance;
 import Nexa.example.Nexa.repository.AttendanceRepository;
 import Nexa.example.Nexa.repository.GroupRepository;

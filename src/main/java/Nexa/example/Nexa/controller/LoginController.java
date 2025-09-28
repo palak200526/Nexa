@@ -19,10 +19,10 @@ public class LoginController {
     @Autowired
     private UserRepository userRepo;
 
-    // Home page - redirect to login
+    // Home page - show homepage
     @GetMapping("/")
     public String home() {
-        return "redirect:/login";
+        return "homepage"; // returns homepage.html
     }
 
     // Show login form

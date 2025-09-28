@@ -2,34 +2,186 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        .nav { margin-top: 20px; }
-        .nav a {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 20px;
-            background: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+        :root {
+            --primary-blue: #1e3a8a;
+            --primary-blue-light: #3b82f6;
+            --primary-blue-lighter: #dbeafe;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --dark-gray: #334155;
+            --text-color: #1e293b;
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
         }
-        .nav a:hover { background: #45a049; }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-subtitle {
+            color: var(--dark-gray);
+            margin: 10px 0 0;
+        }
+
+        .nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: var(--white);
+            color: var(--primary-blue);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .nav a:hover {
+            background: var(--primary-blue-lighter);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-blue-light);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-blue-lighter);
+            border-radius: 50%;
+            color: var(--primary-blue);
+        }
+
+        .nav-text {
+            flex: 1;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .nav-desc {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
     </style>
 </head>
 <body>
-<h1>📊 Admin Dashboard</h1>
-<p>Welcome, Admin! Manage everything from here:</p>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome, Admin! Manage everything from your centralized dashboard.</p>
+    </div>
 
-<div class="nav">
-    <a href="/students">👨‍🎓 Manage Students</a>
-    <a href="/subjects">📖 Manage Subjects</a>
-    <a href="/groups">👥 Manage Groups</a>
-    <a href="/mentors">👨‍🏫 Manage Mentors</a>
-    <a href="/teachers">👩‍🏫 Manage Teachers</a>
-    <a href="/notifications">🔔 Manage Notifications</a>
-    <a href="/teacher-subject-groups">📚 Manage Teacher-Subject Assignments</a>
+    <div class="nav">
+        <a href="/students">
+            <div class="nav-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Manage Students</div>
+                <div class="nav-desc">View, add, edit, and manage student records</div>
+            </div>
+        </a>
+        <a href="/subjects">
+            <div class="nav-icon">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Manage Subjects</div>
+                <div class="nav-desc">Create and manage course subjects</div>
+            </div>
+        </a>
+        <a href="/groups">
+            <div class="nav-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Manage Groups</div>
+                <div class="nav-desc">Organize students into classes and groups</div>
+            </div>
+        </a>
+        <a href="/mentors">
+            <div class="nav-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Manage Mentors</div>
+                <div class="nav-desc">Assign and manage student mentors</div>
+            </div>
+        </a>
+        <a href="/teachers">
+            <div class="nav-icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Manage Teachers</div>
+                <div class="nav-desc">Manage teaching staff and assignments</div>
+            </div>
+        </a>
+        <a href="/notifications">
+            <div class="nav-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Manage Notifications</div>
+                <div class="nav-desc">Send and manage system notifications</div>
+            </div>
+        </a>
+        <a href="/teacher-subject-groups">
+            <div class="nav-icon">
+                <i class="fas fa-link"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Teacher-Subject Assignments</div>
+                <div class="nav-desc">Assign teachers to subjects and groups</div>
+            </div>
+        </a>
+    </div>
 </div>
 </body>
-</html>
+</html>     

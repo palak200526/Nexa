@@ -2,39 +2,177 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        .nav { margin-top: 20px; }
-        .nav a {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 20px;
-            background: #2196F3;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+        :root {
+            --primary-blue: #1e3a8a;
+            --primary-blue-light: #3b82f6;
+            --primary-blue-lighter: #dbeafe;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --dark-gray: #334155;
+            --text-color: #1e293b;
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
         }
-        .nav a:hover { background: #1976D2; }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-subtitle {
+            color: var(--dark-gray);
+            margin: 10px 0 0;
+        }
+
+        .nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: var(--white);
+            color: var(--primary-blue);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .nav a:hover {
+            background: var(--primary-blue-lighter);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-blue-light);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-blue-lighter);
+            border-radius: 50%;
+            color: var(--primary-blue);
+        }
+
+        .nav-text {
+            flex: 1;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .nav-desc {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
     </style>
 </head>
 <body>
-<h1>👩‍🏫 Teacher Dashboard</h1>
-<p>Welcome, Teacher! Manage your classes here:</p>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome, Teacher! Manage your classes and teaching resources.</p>
+    </div>
 
-<div class="nav">
-    <a href="/login">🔐 Login</a>
- </div>
-
-<h2>Your Groups</h2>
-<ul>
-    <li th:each="g : ${groups}">
-        <a th:href="@{|/attendance/group/${g.id}/mark?teacherId=${teacher.id}|}" th:text="${g.name}"></a>
-    </li>
-
-    <li th:if="${#lists.isEmpty(groups)}">No groups assigned yet.</li>
- </ul>
-
-<!-- Attendance actions moved to group students page -->
+    <div class="nav">
+        <a href="/teacher/classes">
+            <div class="nav-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">My Classes</div>
+                <div class="nav-desc">View and manage your assigned classes</div>
+            </div>
+        </a>
+        <a href="/teacher/attendance">
+            <div class="nav-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Attendance</div>
+                <div class="nav-desc">Take and manage student attendance</div>
+            </div>
+        </a>
+        <a href="/teacher/grades">
+            <div class="nav-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Grade Management</div>
+                <div class="nav-desc">Enter and manage student grades</div>
+            </div>
+        </a>
+        <a href="/teacher/materials">
+            <div class="nav-icon">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Teaching Materials</div>
+                <div class="nav-desc">Upload and manage course materials</div>
+            </div>
+        </a>
+        <a href="/teacher/assignments">
+            <div class="nav-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Assignments</div>
+                <div class="nav-desc">Create and manage student assignments</div>
+            </div>
+        </a>
+        <a href="/teacher/communication">
+            <div class="nav-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="nav-text">
+                <div class="nav-title">Communication</div>
+                <div class="nav-desc">Communicate with students and parents</div>
+            </div>
+        </a>
+    </div>
+</div>
 </body>
 </html>
