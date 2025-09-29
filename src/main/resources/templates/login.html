@@ -1,22 +1,110 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <title>Login - NEXA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --dark-gray: #334155;
+            --text-color: #1e293b;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        body { font-family: 'Inter', Arial, sans-serif; margin:0; padding:0; background: var(--light-gray); color: var(--text-color);}
+        /* Header */
+        header { position: fixed; top:0; left:0; width:100%; padding:15px 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index:1000; transition: var(--transition);}
+        header.scrolled { padding: 10px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1);}
+        header .container { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px;}
+        header a.logo { font-family:'Poppins', sans-serif; font-weight:700; font-size:24px; color: var(--primary-blue); text-decoration:none; display:flex; align-items:center; gap:10px;}
+        nav .nav-links { display:flex; gap:25px; list-style:none; margin:0; padding:0;}
+        nav .nav-links li a { text-decoration:none; font-weight:500; color: var(--text-color);}
+        nav .logout-btn { background: var(--primary-blue); color: var(--white); border-radius: var(--border-radius); display:flex; align-items:center; gap:5px; padding:8px 15px;}
+        .mobile-menu-btn { display:none; background:none; border:none; font-size:24px; color: var(--primary-blue); cursor:pointer;}
+        @media (max-width:768px){.mobile-menu-btn{display:block}.nav-links{display:none;flex-direction:column;position:absolute;top:60px;right:20px;padding:15px;background:var(--white);border-radius:var(--border-radius);box-shadow:0 10px 15px rgba(0,0,0,0.1);} .nav-links li{margin-bottom:10px;}}
+        /* Login form */
+        .login-container { max-width: 400px; margin: 120px auto 50px; background: var(--white); padding: 30px; border-radius: var(--border-radius); box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
+        .login-container h2 { text-align:center; color: var(--primary-blue); margin-bottom:20px;}
+        .login-container form { display:flex; flex-direction: column; gap:15px;}
+        .login-container input { padding:10px; border-radius: var(--border-radius); border:1px solid #ccc; font-size:1rem;}
+        .login-container button { background: var(--primary-blue); color: var(--white); padding:10px; border:none; border-radius: var(--border-radius); font-size:1rem; cursor:pointer; transition: var(--transition);}
+        .login-container button:hover { background: #3b82f6;}
+        .error-message { color:red; text-align:center;}
+        /* Footer */
+        footer { background: var(--dark-gray); color: white; padding: 40px 20px; margin-top:50px;}
+        footer h3 { margin-bottom: 15px; }
+        footer a { color:#cbd5e1; text-decoration:none;}
+        footer .container { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:30px;}
+    </style>
 </head>
 <body>
-<h2>Login</h2>
 
-<form th:action="@{/login}" method="post">
-    <label>Email:</label>
-    <input type="email" name="email" required><br><br>
+<!-- Header -->
+<header>
+    <div class="container">
+        <a href="/" class="logo">
+            <i class="fas fa-graduation-cap" style="transform:rotate(-10deg);"></i> NEXA
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a th:href="@{/logout}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+        </nav>
+    </div>
+</header>
 
-    <label>Password:</label>
-    <input type="password" name="password" required><br><br>
+<script>
+    const header = document.querySelector('header');
+    window.addEventListener('scroll',()=>header.classList.toggle('scrolled', window.scrollY>50));
+    const mobileBtn=document.querySelector('.mobile-menu-btn');
+    const navLinks=document.querySelector('.nav-links');
+    mobileBtn.addEventListener('click',()=>{navLinks.style.display=navLinks.style.display==='flex'?'none':'flex';});
+    window.addEventListener('resize',()=>{navLinks.style.display=window.innerWidth>768?'flex':'none';});
+    if(window.innerWidth<=768){navLinks.style.display='none';}
+</script>
 
-    <button type="submit">Login</button>
-</form>
+<!-- Login Form -->
+<div class="login-container">
+    <h2>Login</h2>
+    <form th:action="@{/login}" method="post">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+    <p th:if="${error}" th:text="${error}" class="error-message"></p>
+</div>
 
-<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div>
+            <h3>Nexa</h3>
+            <p>Empowering teachers with streamlined tools to manage classes, track performance, and engage students effectively.</p>
+        </div>
+        <div>
+            <h3>Quick Links</h3>
+            <ul style="list-style:none;padding:0;">
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3>Contact</h3>
+            <ul style="list-style:none;padding:0;">
+                <li><i class="fas fa-map-marker-alt"></i> 123 Education Street, Tech City</li>
+                <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                <li><i class="fas fa-envelope"></i> info@nexa.edu</li>
+            </ul>
+        </div>
+    </div>
+    <div style="text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,0.2); font-size:0.9rem;">
+        &copy; 2025 Nexa Education Management System. All rights reserved.
+    </div>
+</footer>
 
 </body>
 </html>

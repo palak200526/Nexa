@@ -3,97 +3,50 @@ package Nexa.example.Nexa.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "study_materials")
 public class StudyMaterial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher uploadedBy;
+    private String title;
+    private String description;
+    private String department;
+    private String subject;
+    private String fileUrl;
 
+    // Many materials belong to one group
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
-    private String studentName;
-    private String studentId;
-    private String title; // title of the study material
-    private String description; // optional description
-    private String fileUrl; // link to uploaded file (can be local path or cloud link)
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher uploadedBy;
 
-    public StudyMaterial() {
-    }
+    // Getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public StudyMaterial(String studentName, String studentId, String title, String description, String fileUrl) {
-        this.studentName = studentName;
-        this.studentId = studentId;
-        this.title = title;
-        this.description = description;
-        this.fileUrl = fileUrl;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    // Getters and Setters
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public Teacher getUploadedBy() {
-        return uploadedBy;
-    }
-    public void setUploadedBy(Teacher uploadedBy) {
-        this.uploadedBy = uploadedBy;
-    }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
 
-    public Group getGroup() {
-        return group;
-    }
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-    public Long getId() {
-        return id;
-    }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getFileUrl() { return fileUrl; }
+    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
 
-    public String getStudentName() {
-        return studentName;
-    }
+    public Group getGroup() { return group; }
+    public void setGroup(Group group) { this.group = group; }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getFileUrl() {
-        return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
+    public Teacher getUploadedBy() { return uploadedBy; }
+    public void setUploadedBy(Teacher uploadedBy) { this.uploadedBy = uploadedBy; }
 }

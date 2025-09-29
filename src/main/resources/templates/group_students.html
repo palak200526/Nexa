@@ -1,46 +1,207 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Group Students</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Group Students - NEXA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --dark-gray: #334155;
+            --text-color: #1e293b;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--light-gray);
+            margin: 0;
+            padding-top: 70px;
+            color: var(--text-color);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        header.scrolled { padding: 10px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        header .container { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px;}
+        header a.logo { font-family:'Poppins', sans-serif; font-weight:700; font-size:24px; color: var(--primary-blue); text-decoration:none; display:flex; align-items:center; gap:10px;}
+        nav .nav-links { display:flex; gap:25px; list-style:none; margin:0; padding:0;}
+        nav .nav-links li a { text-decoration:none; font-weight:500; color: var(--text-color);}
+        nav .logout-btn { background: var(--primary-blue); color: var(--white); border-radius: var(--border-radius); display:flex; align-items:center; gap:5px; padding:8px 15px;}
+        .mobile-menu-btn { display:none; background:none; border:none; font-size:24px; color: var(--primary-blue); cursor:pointer;}
+        @media (max-width:768px){
+            .mobile-menu-btn{display:block}
+            .nav-links{display:none;flex-direction:column;position:absolute;top:60px;right:20px;padding:15px;background:var(--white);border-radius:var(--border-radius);box-shadow:0 10px 15px rgba(0,0,0,0.1);}
+            .nav-links li{margin-bottom:10px;}
+        }
+
+        /* Container */
+        .container-content {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: var(--white);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+        }
+
+        /* Title */
+        .title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* Table */
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .student-table th,
+        .student-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .student-table th {
+            background: var(--primary-blue);
+            color: var(--white);
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .student-table tr:nth-child(even) {
+            background: #f3f4f6;
+        }
+
+        .student-table tr:hover {
+            background: #e2e8f0;
+        }
+
+        /* Back button */
+        .back-link {
+            display: inline-block;
+            padding: 10px 16px;
+            background: var(--primary-blue);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: background 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            background: #15326b;
+        }
+
+        /* Footer */
+        footer { background: var(--dark-gray); color: var(--white); padding: 40px 20px; margin-top:50px;}
+        footer h3 { margin-bottom: 15px; }
+        footer a { color:#cbd5e1; text-decoration:none;}
+        footer .container-footer { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:30px; }
+    </style>
 </head>
 <body>
-<h1 th:text="'Students in ' + ${group.name}">Group Name</h1>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Department</th>
-        <th>Year</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="student : ${students}">
-        <td th:text="${student.name}">Name</td>
-        <td th:text="${student.email}">Email</td>
-        <td th:text="${student.department}">Department</td>
-        <td th:text="${student.year}">Year</td>
-        <td>
-            <form th:action="@{|/teacher/groups/${group.id}/students/${student.id}/attendance|}" method="post" style="display:inline">
-                <input type="hidden" name="teacherId" th:value="${group.teacher.id}" />
-                <label>Subject ID:</label>
-                <input type="number" name="subjectId" required style="width:80px"/>
-                <label>Present:</label>
-                <select name="present">
-                    <option value="true">Present</option>
-                    <option value="false">Absent</option>
-                </select>
-                <button type="submit">Save</button>
-            </form>
-            <a th:href="@{/attendance}">View Attendance Records</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<!-- Header -->
+<header>
+    <div class="container">
+        <a href="/" class="logo">
+            <i class="fas fa-graduation-cap" style="transform:rotate(-10deg);"></i> NEXA
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a th:href="@{/teacher/groups}">Groups</a></li>
+                <li><a th:href="@{/logout}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+        </nav>
+    </div>
+</header>
 
-<a th:href="@{/teacher/groups}">Back to Groups</a>
+<script>
+    const header = document.querySelector('header');
+    window.addEventListener('scroll',()=>header.classList.toggle('scrolled', window.scrollY>50));
+    const mobileBtn=document.querySelector('.mobile-menu-btn');
+    const navLinks=document.querySelector('.nav-links');
+    mobileBtn.addEventListener('click',()=>{navLinks.style.display=navLinks.style.display==='flex'?'none':'flex';});
+    window.addEventListener('resize',()=>{navLinks.style.display=window.innerWidth>768?'flex':'none';});
+    if(window.innerWidth<=768){navLinks.style.display='none';}
+</script>
+
+<div class="container-content">
+    <h1 th:text="'Students in ' + ${group.name}" class="title">Group Name</h1>
+
+    <table class="student-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Year</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.name}">Name</td>
+            <td th:text="${student.email}">Email</td>
+            <td th:text="${student.department}">Department</td>
+            <td th:text="${student.year}">Year</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/teacher}" class="back-link">← Back to Groups</a>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container-footer">
+        <div>
+            <h3>Nexa</h3>
+            <p>Empowering teachers with streamlined tools to manage classes, track performance, and engage students effectively.</p>
+        </div>
+        <div>
+            <h3>Quick Links</h3>
+            <ul style="list-style:none;padding:0;">
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3>Contact</h3>
+            <ul style="list-style:none;padding:0;">
+                <li><i class="fas fa-map-marker-alt"></i> 123 Education Street, Tech City</li>
+                <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                <li><i class="fas fa-envelope"></i> info@nexa.edu</li>
+            </ul>
+        </div>
+    </div>
+    <div style="text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,0.2); font-size:0.9rem;">
+        &copy; 2025 Nexa Education Management System. All rights reserved.
+    </div>
+</footer>
+
 </body>
 </html>

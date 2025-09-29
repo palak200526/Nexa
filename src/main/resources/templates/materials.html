@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Study Materials - NEXA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --dark-gray: #334155;
+            --text-color: #1e293b;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding-top: 70px;
+            background: var(--light-gray);
+            color: var(--text-color);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        header.scrolled { padding: 10px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        header .container { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px;}
+        header a.logo { font-family:'Poppins', sans-serif; font-weight:700; font-size:24px; color: var(--primary-blue); text-decoration:none; display:flex; align-items:center; gap:10px;}
+        nav .nav-links { display:flex; gap:25px; list-style:none; margin:0; padding:0;}
+        nav .nav-links li a { text-decoration:none; font-weight:500; color: var(--text-color);}
+        nav .logout-btn { background: var(--primary-blue); color: var(--white); border-radius: var(--border-radius); display:flex; align-items:center; gap:5px; padding:8px 15px;}
+        .mobile-menu-btn { display:none; background:none; border:none; font-size:24px; color: var(--primary-blue); cursor:pointer;}
+        @media (max-width:768px){
+            .mobile-menu-btn{display:block}
+            .nav-links{display:none;flex-direction:column;position:absolute;top:60px;right:20px;padding:15px;background:var(--white);border-radius:var(--border-radius);box-shadow:0 10px 15px rgba(0,0,0,0.1);}
+            .nav-links li{margin-bottom:10px;}
+        }
+
+        /* Buttons */
+        .btn-upload, .btn-login, .btn-save {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+        .btn-upload:hover, .btn-login:hover, .btn-save:hover {
+            background-color: #15326b;
+        }
+
+        .btn-edit {
+            background-color: #f97316;
+            color: var(--white);
+        }
+        .btn-edit:hover {
+            background-color: #ea580c;
+        }
+
+        .btn-delete {
+            background-color: #dc2626;
+            color: var(--white);
+        }
+        .btn-delete:hover {
+            background-color: #b91c1c;
+        }
+
+        .btn-secondary, .btn-back {
+            background-color: #6b7280;
+            color: var(--white);
+        }
+        .btn-secondary:hover, .btn-back:hover {
+            background-color: #4b5563;
+        }
+
+        .btn-download {
+            background-color: #14b8a6;
+            color: var(--white);
+        }
+        .btn-download:hover {
+            background-color: #0f766e;
+        }
+
+        /* Footer */
+        footer { background: var(--dark-gray); color: white; padding: 40px 20px; margin-top:50px;}
+        footer h3 { margin-bottom: 15px; }
+        footer a { color:#cbd5e1; text-decoration:none;}
+        footer .container { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:30px; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="container">
+        <a href="/" class="logo">
+            <i class="fas fa-graduation-cap" style="transform:rotate(-10deg);"></i> NEXA
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a th:href="@{/teacher/groups}">Groups</a></li>
+                <li><a th:href="@{/logout}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+        </nav>
+    </div>
+</header>
+
+<script>
+    const header = document.querySelector('header');
+    window.addEventListener('scroll',()=>header.classList.toggle('scrolled', window.scrollY>50));
+    const mobileBtn=document.querySelector('.mobile-menu-btn');
+    const navLinks=document.querySelector('.nav-links');
+    mobileBtn.addEventListener('click',()=>{navLinks.style.display=navLinks.style.display==='flex'?'none':'flex';});
+    window.addEventListener('resize',()=>{navLinks.style.display=window.innerWidth>768?'flex':'none';});
+    if(window.innerWidth<=768){navLinks.style.display='none';}
+</script>
+
+<div class="container mt-4">
+
+    <h2 th:text="'Study Materials for ' + ${group.name}">Group Name</h2>
+
+    <!-- Upload Form -->
+    <div class="card mb-4 p-3">
+        <h4>Upload New Material</h4>
+        <form th:action="@{/teacher/groups/{id}/materials/upload(id=${group.id})}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" placeholder="Enter title" required/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" name="description" class="form-control" placeholder="Optional description"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">File</label>
+                <input type="file" name="file" class="form-control" required/>
+            </div>
+            <button type="submit" class="btn btn-upload">Upload</button>
+        </form>
+    </div>
+
+    <!-- Materials Table -->
+    <h4>Available Materials</h4>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Uploaded By</th>
+            <th>File</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="material : ${materials}">
+            <td th:text="${material.title}">Title</td>
+            <td th:text="${material.description}">Description</td>
+            <td th:text="${material.uploadedBy.name}">Teacher</td>
+            <td>
+                <a th:href="@{'/teacher/groups/' + ${group.id} + '/materials/download/' + ${material.id}}"
+                   class="btn btn-sm btn-download" target="_blank">
+                    Download
+                </a>
+            </td>
+            <td>
+                <!-- Edit Button triggers Modal -->
+                <button type="button" class="btn btn-sm btn-edit"
+                        data-bs-toggle="modal"
+                        th:attr="data-bs-target='#editModal_' + ${material.id}">
+                    Edit
+                </button>
+
+                <!-- Delete Form -->
+                <form th:action="@{'/teacher/groups/' + ${group.id} + '/materials/' + ${material.id} + '/delete'}"
+                      method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-delete">Delete</button>
+                </form>
+
+                <!-- Edit Modal -->
+                <div class="modal fade" th:id="'editModal_' + ${material.id}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Material</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form th:action="@{'/teacher/groups/' + ${group.id} + '/materials/' + ${material.id} + '/edit'}" method="post">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Title</label>
+                                        <input type="text" name="title" th:value="${material.title}" class="form-control" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <input type="text" name="description" th:value="${material.description}" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-upload">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/teacher}" class="btn btn-back mt-3">Back to Groups</a>
+
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div>
+            <h3>Nexa</h3>
+            <p>Empowering teachers with streamlined tools to manage classes, track performance, and engage students effectively.</p>
+        </div>
+        <div>
+            <h3>Quick Links</h3>
+            <ul style="list-style:none;padding:0;">
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3>Contact</h3>
+            <ul style="list-style:none;padding:0;">
+                <li><i class="fas fa-map-marker-alt"></i> 123 Education Street, Tech City</li>
+                <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                <li><i class="fas fa-envelope"></i> info@nexa.edu</li>
+            </ul>
+        </div>
+    </div>
+    <div style="text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,0.2); font-size:0.9rem;">
+        &copy; 2025 Nexa Education Management System. All rights reserved.
+    </div>
+</footer>
+
+</body>
+</html>

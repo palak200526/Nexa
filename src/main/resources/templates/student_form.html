@@ -21,39 +21,35 @@
     <label>Year:</label>
     <select th:field="*{year}" required>
         <option value="">Select Year</option>
-        <option value="1">1st Year</option>
-        <option value="2">2nd Year</option>
-        <option value="3">3rd Year</option>
-        <option value="4">4th Year</option>
+        <option value="1" th:selected="${student.year == 1}">1st Year</option>
+        <option value="2" th:selected="${student.year == 2}">2nd Year</option>
+        <option value="3" th:selected="${student.year == 3}">3rd Year</option>
+        <option value="4" th:selected="${student.year == 4}">4th Year</option>
     </select><br/>
 
     <label>Mentor:</label>
     <select th:field="*{mentor.id}">
-        <option th:value="''">-- None --</option>
+        <option th:value="">-- None --</option>
         <option th:each="m : ${mentors}"
                 th:value="${m.id}"
                 th:text="${m.name + ' (' + m.email + ')'}"
                 th:selected="${student.mentor != null && student.mentor.id == m.id}">
-            Mentor
         </option>
-    </select>
+    </select><br/>
 
     <label>Group:</label>
     <select th:field="*{group.id}">
-        <option th:value="''">-- None --</option>
+        <option th:value="">-- None --</option>
         <option th:each="g : ${groups}"
                 th:value="${g.id}"
                 th:text="${g.name}"
                 th:selected="${student.group != null && student.group.id == g.id}">
         </option>
-    </select>
-
-
-    <br/>
+    </select><br/>
 
     <button type="submit">Save</button>
 </form>
 
-<p><a href="/students">Back to students</a></p>
+<p><a th:href="@{/students}">Back to students</a></p>
 </body>
 </html>

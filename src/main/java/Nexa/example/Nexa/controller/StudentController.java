@@ -5,12 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import Nexa.example.Nexa.model.Marks;
 import Nexa.example.Nexa.model.Student;
@@ -36,13 +31,14 @@ public class StudentController {
     @Autowired private MentorRepository mentorRepository;
     @Autowired private GroupRepository groupRepository;
     @Autowired private TeacherSubjectGroupService teacherSubjectGroupService;
+
     // List all students
     @GetMapping
     public String listStudents(Model model) {
         model.addAttribute("students", studentService.getAllStudents());
         return "students";
     }
-    
+
     // List students by year
     @GetMapping("/year/{year}")
     public String listStudentsByYear(@PathVariable Integer year, Model model) {
@@ -50,12 +46,32 @@ public class StudentController {
         model.addAttribute("selectedYear", year);
         return "students";
     }
-    
-    // Search students by year and name
+
+    // Student dashboard
+    @GetMapping("/dashboard/{studentId}")
+    public String studentDashboard(@PathVariable Long studentId, Model model) {
+        System.out.println("Fetching student with ID: " + studentId);
+
+        Student student = studentService.getStudentById(studentId);
+        System.out.println("Student object: " + student);
+        System.out.println("Student class: " + (student != null ? student.getClass() : "null"));
+
+        if (student == null) {
+            System.out.println("Student not found, redirecting...");
+            return "redirect:/students";
+        }
+
+        model.addAttribute("student", student);
+        System.out.println("Added student to model: " + student.getName());
+
+        return "student_dashboard";
+    }
+
+    // Search students
     @GetMapping("/search")
     public String searchStudents(@RequestParam(required = false) Integer year,
-                                @RequestParam(required = false) String name,
-                                Model model) {
+                                 @RequestParam(required = false) String name,
+                                 Model model) {
         List<Student> students;
         if (year != null && name != null && !name.trim().isEmpty()) {
             students = studentService.searchStudentsByYearAndName(year, name);
@@ -66,14 +82,14 @@ public class StudentController {
         } else {
             students = studentService.getAllStudents();
         }
-        
+
         model.addAttribute("students", students);
         model.addAttribute("selectedYear", year);
         model.addAttribute("searchName", name);
         return "students";
     }
 
-    // Show form to create new student
+    // New student form
     @GetMapping("/new")
     public String newStudentForm(Model model) {
         model.addAttribute("student", new Student());
@@ -81,7 +97,6 @@ public class StudentController {
         model.addAttribute("groups", groupRepository.findAll());
         return "student_form";
     }
-
 
     // Save student
     @PostMapping("/save")
@@ -110,7 +125,7 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    // ------------------- STUDENT SELF VIEWS -------------------
+    // STUDENT SELF VIEWS
     @GetMapping("/{studentId}/attendance")
     public String myAttendance(@PathVariable Long studentId, Model model) {
         model.addAttribute("attendanceList", attendanceRepository.findByStudentId(studentId));
@@ -133,13 +148,13 @@ public class StudentController {
         model.addAttribute("student", s);
         return "study_materials";
     }
-    
+
     @GetMapping("/{studentId}/subjects")
     public String mySubjects(@PathVariable Long studentId, Model model) {
         Student student = studentService.getStudentById(studentId);
         Long groupId = student.getGroup() != null ? student.getGroup().getId() : null;
-        List<TeacherSubjectGroup> subjectAssignments = groupId == null ? 
-            java.util.List.of() : teacherSubjectGroupService.getAssignmentsByGroup(groupId);
+        List<TeacherSubjectGroup> subjectAssignments = groupId == null ?
+                java.util.List.of() : teacherSubjectGroupService.getAssignmentsByGroup(groupId);
         model.addAttribute("subjectAssignments", subjectAssignments);
         model.addAttribute("student", student);
         return "student_subjects";

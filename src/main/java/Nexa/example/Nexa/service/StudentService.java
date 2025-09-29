@@ -75,11 +75,10 @@ public class StudentService {
     public List<Integer> getDistinctYears() {
         return studentRepository.findDistinctYears();
     }
-    
 
     public Student getStudentById(Long id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid student Id: " + id));
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
     }
 
     public void deleteStudent(Long id) {

@@ -1,26 +1,36 @@
 package Nexa.example.Nexa.service;
 
-import Nexa.example.Nexa.model.Group;
 import Nexa.example.Nexa.model.StudyMaterial;
-import Nexa.example.Nexa.model.Teacher;
-import Nexa.example.Nexa.repository.GroupRepository;
 import Nexa.example.Nexa.repository.StudyMaterialRepository;
-import Nexa.example.Nexa.repository.TeacherRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudyMaterialService {
 
     private final StudyMaterialRepository repo;
 
+    @Value("${upload.dir}")
+    private String uploadDir;
+
     public StudyMaterialService(StudyMaterialRepository repo) {
         this.repo = repo;
     }
 
-    public StudyMaterial saveMaterial(StudyMaterial material) {
+    public StudyMaterial saveMaterial(StudyMaterial material, MultipartFile file) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(uploadDir, fileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            material.setFileUrl(filePath.toString());
+        }
         return repo.save(material);
     }
 
@@ -28,21 +38,11 @@ public class StudyMaterialService {
         return repo.findByGroupId(groupId);
     }
 
-    public void deleteMaterial(Long id) {
-        repo.deleteById(id);
+    public Optional<StudyMaterial> getById(Long id) {
+        return repo.findById(id);
     }
 
-    @Autowired
-    private StudyMaterialRepository materialRepo;
-    @Autowired private GroupRepository groupRepo;
-    @Autowired private TeacherRepository teacherRepo;
-
-    public StudyMaterial upload(Long teacherId, Long groupId, StudyMaterial material) {
-        Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
-        Group group = groupRepo.findById(groupId).orElseThrow();
-
-        material.setUploadedBy(teacher);
-        material.setGroup(group);
-        return materialRepo.save(material);
+    public void deleteMaterial(Long id) {
+        repo.deleteById(id);
     }
 }

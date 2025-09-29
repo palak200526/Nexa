@@ -12,13 +12,13 @@ import Nexa.example.Nexa.model.Student;
 public interface StudentRepository extends JpaRepository<Student, Long> {
     // Find students by year
     List<Student> findByYear(Integer year);
-    
+
     // Find students by year and name (for searching)
     List<Student> findByYearAndNameContainingIgnoreCase(Integer year, String name);
-    
+
     // Find students by name (for searching)
     List<Student> findByNameContainingIgnoreCase(String name);
-    
+
     // Get all unique years
     @Query("SELECT DISTINCT s.year FROM Student s ORDER BY s.year")
     List<Integer> findDistinctYears();
